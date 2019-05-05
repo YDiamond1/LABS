@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>AgeHumanException</OriginalElement>
+  <nodes>
+    <node x="285.33333333333337" y="541.0">Human</node>
+    <node x="226.33333333333337" y="1408.0">Salesman</node>
+    <node x="710.8333333333334" y="322.5">Eating</node>
+    <node x="467.83333333333337" y="300.0">AgeHumanException</node>
+    <node x="849.8333333333334" y="311.5">Sleepable</node>
+    <node x="116.91666666666674" y="11.0">Time</node>
+    <node x="1437.8333333333335" y="255.0">House</node>
+    <node x="1225.8333333333335" y="311.0">MoveException</node>
+    <node x="348.83333333333337" y="1284.0">Sellable</node>
+    <node x="1043.8333333333335" y="322.5">Moveable</node>
+    <node x="1703.8333333333335" y="277.5">Corner</node>
+    <node x="295.83333333333337" y="299.5">Human.Mood</node>
+    <node x="53.607971014492705" y="1261.0">Salesman.Newspaper</node>
+    <node x="858.9333333333334" y="1607.0">Main</node>
+    <node x="73.83333333333337" y="299.5">Thing</node>
+    <node x="1181.692391304348" y="0.0">Place</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Human" target="Human.Mood">
+      <point x="-38.26666666666665" y="-335.0" />
+      <point x="390.5666666666667" y="471.0" />
+      <point x="352.83333333333337" y="471.0" />
+      <point x="-19.0" y="48.5" />
+    </edge>
+    <edge source="Human.Mood" target="Time">
+      <point x="0.0" y="-48.5" />
+      <point x="371.83333333333337" y="215.0" />
+      <point x="237.66666666666674" y="215.0" />
+      <point x="51.75" y="81.5" />
+    </edge>
+    <edge source="Main" target="Human">
+      <point x="-8.450000000000045" y="-25.5" />
+      <point x="934.9833333333333" y="1547.0" />
+      <point x="530.3333333333334" y="1547.0" />
+      <point x="530.3333333333334" y="1236.0" />
+      <point x="543.6333333333333" y="1236.0" />
+      <point x="114.79999999999995" y="335.0" />
+    </edge>
+    <edge source="Main" target="Salesman">
+      <point x="-42.25" y="-25.5" />
+      <point x="901.1833333333334" y="1567.0" />
+      <point x="377.83333333333337" y="1567.0" />
+      <point x="50.5" y="59.5" />
+    </edge>
+    <edge source="Salesman" target="Salesman.Newspaper">
+      <point x="-80.79999999999995" y="-59.5" />
+      <point x="246.53333333333342" y="1388.0" />
+      <point x="101.1079710144927" y="1388.0" />
+      <point x="-47.5" y="48.5" />
+    </edge>
+    <edge source="Main" target="House">
+      <point x="42.25" y="-25.5" />
+      <point x="985.6833333333334" y="1567.0" />
+      <point x="1558.3079710144928" y="1567.0" />
+      <point x="1558.3079710144928" y="521.0" />
+      <point x="1622.3333333333335" y="521.0" />
+      <point x="61.5" y="93.0" />
+    </edge>
+    <edge source="Human" target="Sleepable">
+      <point x="57.40000000000009" y="-335.0" />
+      <point x="486.23333333333346" y="481.0" />
+      <point x="936.3333333333334" y="481.0" />
+      <point x="0.0" y="36.5" />
+    </edge>
+    <edge source="Human.Mood" target="Human">
+      <point x="57.0" y="48.5" />
+      <point x="0.0" y="-335.0" />
+    </edge>
+    <edge source="Salesman" target="Sellable">
+      <point x="80.79999999999995" y="-59.5" />
+      <point x="408.1333333333333" y="1388.0" />
+      <point x="428.83333333333337" y="1388.0" />
+      <point x="0.0" y="25.5" />
+    </edge>
+    <edge source="Human" target="Place">
+      <point x="76.5333333333333" y="-335.0" />
+      <point x="505.3666666666667" y="491.0" />
+      <point x="1033.3333333333335" y="491.0" />
+      <point x="1033.3333333333335" y="215.0" />
+      <point x="1217.692391304348" y="215.0" />
+      <point x="-60.0" y="92.5" />
+    </edge>
+    <edge source="Sellable" target="Human">
+      <point x="0.0" y="-25.5" />
+      <point x="0.0" y="335.0" />
+    </edge>
+    <edge source="Main" target="MoveException">
+      <point x="8.450000000000045" y="-25.5" />
+      <point x="951.8833333333334" y="1547.0" />
+      <point x="1369.8333333333335" y="1547.0" />
+      <point x="48.0" y="37.0" />
+    </edge>
+    <edge source="Main" target="Time">
+      <point x="-76.04999999999995" y="-25.5" />
+      <point x="867.3833333333334" y="1587.0" />
+      <point x="0.0" y="1587.0" />
+      <point x="0.0" y="235.0" />
+      <point x="134.16666666666674" y="235.0" />
+      <point x="-51.75" y="81.5" />
+    </edge>
+    <edge source="Human" target="MoveException">
+      <point x="133.9333333333334" y="-335.0" />
+      <point x="562.7666666666668" y="521.0" />
+      <point x="1273.8333333333335" y="521.0" />
+      <point x="-48.0" y="37.0" />
+    </edge>
+    <edge source="Human" target="Time">
+      <point x="-76.5333333333333" y="-335.0" />
+      <point x="352.30000000000007" y="491.0" />
+      <point x="285.33333333333337" y="491.0" />
+      <point x="285.33333333333337" y="225.0" />
+      <point x="203.16666666666674" y="225.0" />
+      <point x="17.25" y="81.5" />
+    </edge>
+    <edge source="Salesman.Newspaper" target="Salesman">
+      <point x="47.5" y="48.5" />
+      <point x="196.1079710144927" y="1378.0" />
+      <point x="286.9333333333333" y="1378.0" />
+      <point x="-40.40000000000009" y="-59.5" />
+    </edge>
+    <edge source="Main" target="Corner">
+      <point x="76.04999999999995" y="-25.5" />
+      <point x="1019.4833333333333" y="1587.0" />
+      <point x="1805.3333333333335" y="1587.0" />
+      <point x="1805.3333333333335" y="521.0" />
+      <point x="1847.8333333333335" y="521.0" />
+      <point x="48.0" y="70.5" />
+    </edge>
+    <edge source="Corner" target="Place">
+      <point x="-48.0" y="-70.5" />
+      <point x="1751.8333333333335" y="215.0" />
+      <point x="1337.692391304348" y="215.0" />
+      <point x="60.0" y="92.5" />
+    </edge>
+    <edge source="Salesman" target="Human">
+      <point x="0.0" y="-59.5" />
+      <point x="327.33333333333337" y="1236.0" />
+      <point x="314.0333333333334" y="1236.0" />
+      <point x="-114.79999999999995" y="335.0" />
+    </edge>
+    <edge source="House" target="Place">
+      <point x="-61.5" y="-93.0" />
+      <point x="1499.3333333333335" y="235.0" />
+      <point x="1289.692391304348" y="235.0" />
+      <point x="12.0" y="92.5" />
+    </edge>
+    <edge source="Sleepable" target="Place">
+      <point x="0.0" y="-36.5" />
+      <point x="936.3333333333334" y="205.0" />
+      <point x="1193.692391304348" y="205.0" />
+      <point x="-84.0" y="92.5" />
+    </edge>
+    <edge source="Human" target="Thing">
+      <point x="-133.9333333333334" y="-335.0" />
+      <point x="294.9" y="521.0" />
+      <point x="168.83333333333337" y="521.0" />
+      <point x="0.0" y="48.5" />
+    </edge>
+    <edge source="Human" target="Eating">
+      <point x="38.26666666666665" y="-335.0" />
+      <point x="467.1" y="471.0" />
+      <point x="770.3333333333334" y="471.0" />
+      <point x="0.0" y="25.5" />
+    </edge>
+    <edge source="Moveable" target="Place">
+      <point x="-1.1368683772161603E-13" y="-25.5" />
+      <point x="1124.3333333333333" y="225.0" />
+      <point x="1241.692391304348" y="225.0" />
+      <point x="-36.0" y="92.5" />
+    </edge>
+    <edge source="Human" target="AgeHumanException">
+      <point x="19.13333333333344" y="-335.0" />
+      <point x="447.9666666666668" y="461.0" />
+      <point x="579.3333333333334" y="461.0" />
+      <point x="0.0" y="48.0" />
+    </edge>
+    <edge source="Salesman.Newspaper" target="Thing">
+      <point x="0.0" y="-48.5" />
+      <point x="148.6079710144927" y="521.0" />
+      <point x="105.5" y="521.0" />
+      <point x="-63.33333333333337" y="48.5" />
+    </edge>
+    <edge source="Human" target="Moveable">
+      <point x="95.66666666666674" y="-335.0" />
+      <point x="524.5000000000001" y="501.0" />
+      <point x="1124.3333333333335" y="501.0" />
+      <point x="0.0" y="25.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.969245647969052" x="1032.212875999084" y="432.36618895843134" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
