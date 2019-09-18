@@ -1,36 +1,23 @@
 package classes;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Human implements Moveable, Eating,Sleepable{
+public class Human implements Moveable, Eating,Sleepable, Serializable {
 
-    public class Mood{
-        protected boolean isGood;
-        public Mood(){
-            if (time == Time.MORNING) isGood = false;
-            else isGood = true;
-        }
 
-        public void setGood(boolean good) {
-            isGood = good;
-        }
-        public void getMood(){
-            if (isGood)System.out.println(" с хорошим нвстроением ");
-            else System.out.print(" без настроения ");
-        }
-    }
 
 
     //поля
     protected String name;
     protected int age;
-    protected boolean isHungry = true;
-    protected boolean isSleep = true;
+    transient protected boolean isHungry = true;
+    transient protected boolean isSleep = true;
     protected Place place;
-    protected Time time;
+
     protected boolean isMoveble;
     protected Thing thing;
-    protected Santiks money;
-    protected Mood mood;
+    transient protected Santiks money;
+
 
     public int getMoney() {
         return money.quality;
@@ -53,9 +40,6 @@ public class Human implements Moveable, Eating,Sleepable{
         return place;
     }
 
-    public Time getTime() {
-        return time;
-    }
 
     public String getName(){return name;}
 
@@ -86,7 +70,7 @@ public class Human implements Moveable, Eating,Sleepable{
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, age, isHungry, isSleep, place, time);
+        return Objects.hash(name, age, isHungry, isSleep, place);
     }
 
 
@@ -95,7 +79,6 @@ public class Human implements Moveable, Eating,Sleepable{
 
     //methods
     public void eat(){
-        mood.getMood();
         this.isHungry = false;
         System.out.println(this.name+" поел");
     }
@@ -124,7 +107,7 @@ public class Human implements Moveable, Eating,Sleepable{
 
     public void wakeUp(Place place){
         this.isSleep = false;
-        System.out.println(name + " проснулся в " + place);
+        System.out.println(name + " проснулся в " + place.toString());
     }
     public void wakeUp(){
         this.isSleep = false;
@@ -138,7 +121,7 @@ public class Human implements Moveable, Eating,Sleepable{
         System.out.print(name+" увидел "+human.getName()+"\n");
     }
     public void exit(){
-        System.out.print(name + " вышел из "+place+'\n');
+        System.out.print(name + " вышел из "+place.toString()+'\n');
         place = null;
     }
     public void findInformation(){
@@ -158,10 +141,8 @@ public class Human implements Moveable, Eating,Sleepable{
         this.name = name;
         this.age = age;
         this.place = place;
-        this.time = time;
         this.isMoveble = isMoveble;
         money = new Santiks(10);
-        mood  = new Mood();
         System.out.println("Создался человечек\n "+ name);
     }
 }
