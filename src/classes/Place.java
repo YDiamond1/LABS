@@ -2,15 +2,20 @@ package classes;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public  class Place {
+public class Place implements Serializable {
     protected int x;
     protected int y;
 
-
+    {
+        x = 0;
+        y = 0;
+    }
 
     public Place(){
+
         x = 0;
         y = 0;
     }
@@ -19,18 +24,28 @@ public  class Place {
         x = _x;
         y = _y;
     }
-    public Place(JSONObject ob) {
+    public Place(Integer[] array){
+        x = array[0];
+        y = array[1];
+    }
+    public int[] getLoc(){
+        int[] ar ={x,y};
+        return ar;
+    }
+    public Place(JSONObject ob){
         this();
-        for(String str : ob.keySet()){
-            switch(str){
+        for(String str: ob.keySet()){
+            switch (str){
                 case "x":{
                     x = ob.getInt("x");
                     break;
                 }
-                case "y":{y = ob.getInt(str);break;}
+                case "y":{
+                    y = ob.getInt("y");
+                    break;
+                }
             }
         }
-
     }
 
     public int getX() {
@@ -57,9 +72,6 @@ public  class Place {
 
     @Override
     public String toString() {
-        return "Place{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return "{x="+x+" y="+y+"}";
     }
 }

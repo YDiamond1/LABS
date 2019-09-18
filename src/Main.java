@@ -3,13 +3,11 @@ import parsers.CSV.CSVException;
 import parsers.CSV.CSVParser;
 
 import java.io.*;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 
-import parsers.Command;
+import commands.Command;
 import usingcollection.SalesmanSet;
 
 public class Main {
@@ -77,6 +75,7 @@ public class Main {
     }
 */
    // laba5
+   /*
     public static void main(String[] args) {
 
         //получение файлов
@@ -126,7 +125,7 @@ public class Main {
         final boolean [] closeApp = {false};
         try (BufferedReader in = new BufferedReader(new InputStreamReader(System.in, charset))){
 
-            setSL = new SalesmanSet(new LinkedHashSet<>(),parser.getObjects());
+            setSL = new SalesmanSet(new ConcurrentSkipListSet<>(),parser.getObjects());
             Command cmd = new Command(in,setSL,charset);
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
@@ -146,7 +145,10 @@ public class Main {
         catch (NullPointerException ex){
             System.out.println("НЕЧЕГО СОХРАНЯТЬ");
         }
+        catch (NumberFormatException ex){
+            System.out.println("Неверный формат переданых данных");
+        }
 
     }
-
+*/
 }

@@ -1,6 +1,5 @@
 package parsers.CSV;
 
-import parsers.Command;
 import parsers.Parser;
 
 import java.io.ByteArrayOutputStream;
@@ -77,7 +76,7 @@ public class CSVParser implements Parser, CSVAware {
                         }
                     }catch (CSVException ex) {
                         System.out.println(ex.getMessage());
-                        Command.wasEdit=true;
+
                     }
                     end = i;
                     tmp=c.substring(begin,end);

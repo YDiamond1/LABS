@@ -1,47 +1,59 @@
 package usingcollection;
 
 
+import Server.User;
+import Server.db.DB;
+import Server.db.DBException;
 import classes.Place;
 import classes.Salesman;
-import parsers.CSV.CSVObject;
-import parsers.CSV.CSVParser;
-import parsers.Command;
 
 import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.*;
-import java.util.Comparator;
+import java.sql.*;
+import java.util.Date;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.stream.Collectors;
 
 public class SalesmanSet {
-    protected Set<Salesman> set;
+    protected ConcurrentSkipListSet<Salesman> set;
     protected Date date = new Date();
-    protected List<Salesman> sortedset;
     protected BufferedOutputStream out;
+    public boolean saving = false;
+    private DB db;
 
+    public SalesmanSet(ConcurrentSkipListSet<Salesman> set,DB db)
+    {
+        try{
+            this.set = set;
+            this.db = db;
+            db.connect("postgres","selles202");
+            loadCollection();
+        }catch(DBException ex){
+            System.out.println(ex.getMessage());
+            System.exit(-1);
+        }
 
-
-    /**
-     * сортирует по умолчанию list
-     */
-    public void sort(){
-        sortedset = new ArrayList<>(set);
-        Collections.sort(sortedset, new Comparator<Salesman>() {
-            @Override
-            public int compare(Salesman o1, Salesman o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-        set.clear();
-        set.addAll(sortedset);
     }
+
+   /* public Set<User> getUsers() {
+        return users;
+    }*/
 
     /**
      * очищает коллекцию
      */
-    public void clear(){
-        set.clear();
+    public String clear(User user){
+        set.removeAll(set.stream().filter(c -> c.getUser().equals(user.getNick())).collect(Collectors.toList()));
+        Connection con = db.connection;
+        try {
+            PreparedStatement statement = con.prepareStatement("DELETE FROM public.\"OBJECTS\" WHERE \"user\"=?");
+            statement.setString(1,user.getNick());
+            statement.executeUpdate();
+            statement.close();
+        }catch (SQLException ex){
+            return ex.getMessage();
+        }
+        return "Collection is cleared";
     }
 
     /**
@@ -50,15 +62,11 @@ public class SalesmanSet {
      */
     public String show(){
         if(set.isEmpty())return "Collection is empty";
-        String tmp = "";
-        Iterator<Salesman> it = set.iterator();
-        int counter=0;
-        tmp+="element" + counter+ ":"+it.next().toString()+'\n';
-        while (it.hasNext()){
-            tmp+="element" +(++counter)+ ":"+it.next().toString()+'\n';
-        }
-       // tmp+="element"+counter+":"+ it.next().toString();
-        return tmp;
+        String[] tmp ={""};
+        int[] k={1};
+        set.forEach(e->{tmp[0]+="elenent"+(k[0]++)+": "+e.toString()+" (User: "+e.getUser()+")\n";});
+        return tmp[0];
+
     }
 
     /**
@@ -67,43 +75,66 @@ public class SalesmanSet {
      */
     public String info(){
         String information = String.format("\ntype: %s\nobjects number: %d\nCreation date: %s\n",set.getClass().getName(),set.size(),date.toString());
+        System.out.println(information);
         return information;
     }
 
+    private PreparedStatement set(PreparedStatement statement,Salesman object,boolean a)throws SQLException{
+        int c=0;
+        statement.setString(++c,object.getName());
+        statement.setInt(++c,object.getAge());
+        statement.setInt(++c,object.getQuantityOfNewspaper());
+        if(a) statement.setString(++c,object.getTimeOFcreation().toString());
+        statement.setBoolean(++c,object.getIS());
+
+        statement.setString(++c,object.getUser());
+        System.out.println(object.getUser());
+        Integer[] ina = {object.getPlace().getX(),object.getPlace().getY()};
+        Array ar =db.connection.createArrayOf("INTEGER",ina);
+        statement.setArray(++c,ar);
+        return statement;
+    }
     /**
      * добавляет элемент в коллекцию
      * @param object объект
      */
-    public boolean add(Salesman object){
+    public String add(Salesman object){
         boolean a=set.add(object);
-        sort();
-        if(a)System.out.println("Объект добавился");
-        else System.out.println("Объект не добавился");
-        return a;
+        Connection con = db.connection;
+        if(a){
+            try {
+                PreparedStatement statement = con.prepareStatement("INSERT INTO public.\"OBJECTS\" (name, age, \"QON\", \"TOC\", \"isMoveble\", \"user\", place) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                set(statement,object,true);
+                statement.executeUpdate();
+                statement.close();
+            }catch (SQLException ex){
+                return ex.getMessage();
+            }
+            return "Object added";
+        }
+        else return "Didn't add";
     }
 
     /**
      * добавляет элемент если минимален
      * @param object объект
      */
-    public boolean add_if_min(Salesman object){
-        sort();
-        if(object.getName().compareTo(sortedset.get(0).getName())<0)
+    public String add_if_min(Salesman object){
+        Salesman o =(Salesman) set.stream().min(Salesman::compareTo).get();
+        if(object.compareTo(o)<0)
             return add(object);
-        System.out.println("Объект не добавился");
-        return false;
+    return "Didnt add";
     }
 
     /**
      * добавляет элемент если минимален
      * @param object объект
      */
-    public boolean add_if_max(Salesman object){
-        sort();
-        if(object.getName().compareTo(sortedset.get(sortedset.size()-1).getName())>0)
+    public String add_if_max(Salesman object){
+        Salesman o =(Salesman) set.stream().max(Salesman::compareTo).get();
+        if(object.compareTo(o)>0)
             return add(object);
-        System.out.println("Объект не добавился");
-        return false;
+        return "Didnt add";
     }
 
     /**
@@ -111,98 +142,98 @@ public class SalesmanSet {
      * @param object объкт
      * @throws InvalidParameterException если не найден объект
      */
-    public boolean remove(Salesman object)throws InvalidParameterException{
-        Iterator<Salesman> it = set.iterator();
-        while(it.hasNext()){
-            Salesman tmp = it.next();
-            if(tmp.equals(object)) {
-                it.remove();
-
-                System.out.println("Объект удалился");
-
-                sort();
-                return true;
+    public String remove(Salesman object)throws InvalidParameterException{
+        boolean remove = set.remove(object);
+        String deleting = "DELETE FROM OBJECTS WHERE  name=? AND age=? AND QOC=? AND TOC=? AND isMoveble=? AND user=? AND place=?";
+        if(remove){
+            try {
+                Connection con = db.connection;
+                PreparedStatement statement = con.prepareStatement("DELETE FROM public.\"OBJECTS\" WHERE name=? AND age=? AND \"QON\" =? AND \"isMoveble\"=? AND \"user\"=? AND place=?");
+                set(statement,object,false);
+                statement.executeUpdate();
+                statement.close();
+            }catch (SQLException ex){
+                return ex.getMessage();
             }
+            return "Object was removed";
         }
-        if(it.hasNext())
-            throw new InvalidParameterException("НЕ СУЩЕСТВУЕТ ТАКОГО ОБЪЕКТА");
-        System.out.println("Нет в коллекции такого объекта");
-        return false;
+        return "Object isn't in collection";
     }
 
     //конструктор
-    public SalesmanSet(Set<Salesman> _set,List<CSVObject> list) throws InvalidParameterException{
+  /*  public SalesmanSet(ConcurrentSkipListSet<Salesman> _set,List<CSVObject> list) throws InvalidParameterException{
         set = _set;
-        Iterator<CSVObject> it = list.iterator();
+//        importing(list);
+    }*/
 
-        while(it.hasNext()){
-            CSVObject csv = it.next();
-            if(csv.length()==6) {
-                final boolean add = set.add(new Salesman
-                        (
-                            csv.getField(0),
-                            Integer.parseInt(csv.getField(1)),
-                            new Place(Integer.parseInt(csv.getField(2)),Integer.parseInt(csv.getField(3))),
-                            Boolean.parseBoolean(csv.getField(4)),
-                            Integer.parseInt(csv.getField(5))
-                        )
-                );
-                    if(!add) {
-                        System.out.println("НЕВОЗМОЖНО ДОБАВИТЬ");
-                        System.exit(-1);
-                    }
-
-            }
-            else{
-                    try {
-                        if (CSVParser.fileEmpty) {
-                            System.out.println("Пустой файл");
-                        }
-                        else{
-                        throw new InvalidParameterException("НЕВЕРНЫЙ ФОРМАТ ДАННЫХ");}
-                    }catch (InvalidParameterException ex){
-                        System.out.println(ex.getMessage());
-                    }
-
-                }
-        }
-
+    public SalesmanSet(ConcurrentSkipListSet<Salesman> set){
+        this.set = set;
     }
 
 
-
-    /**
-     * сохряняет коллекцию
-     * @param wasEdit изменена ли коллекция
-     * @param filename путь к файлу
-     */
-    public void save(boolean wasEdit,String filename){
-        if(wasEdit) {
-            try (BufferedOutputStream out =new BufferedOutputStream(new FileOutputStream(filename,false))) {
-                out.write(toCSV().getBytes("CP1251"));
-                Command.saving =true;
-                out.close();
-            } catch (IOException ex) {
-                System.out.println("НЕТ ДОСТУПА К ФАЙЛУ");
-                Command.saving = false;
-            }
-        }
-    }
 
     /**
      * переводит в CSV формат
      * @return строку в CSV формате
      */
     public String toCSV(){
-        String tmp = "";
-        if(sortedset!=null && !sortedset.isEmpty()){
-           Iterator<Salesman> it = sortedset.iterator();
-                   if(it!= null){
-                       while (it.hasNext()){
-                           tmp+=it.next().toCSV()+"\n";
-                       }
-                   }
-        }
-        return tmp;
+        String[] tmp = {""};
+        set.stream().forEach(e->tmp[0]+=e.toCSV()+"\n");
+        return tmp[0];
     }
+    public void loadCollection(){
+
+        Connection con = db.connection;
+
+        try {
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM public.\"OBJECTS\"");
+            ResultSet objects = statement.executeQuery();
+            while (objects.next()){
+                set.add(new Salesman(
+                        objects.getString("name"),
+                        objects.getInt("age"),
+                        new Place((Integer[]) objects.getArray("place").getArray()),
+                        objects.getBoolean("isMoveble"),
+                        objects.getInt("QON"),
+                        objects.getString("user"),
+                        objects.getString("TOC")
+                ));
+            }
+        }catch(SQLException ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public DB getDb() {
+        return db;
+    }
+    /*
+    public String importing(List<CSVObject> list){
+        Iterator<CSVObject> it = list.iterator();
+        Set<Salesman> seto = new TreeSet<>();
+        while(it.hasNext()){
+            CSVObject csv = it.next();
+            if(csv.length()==6) {
+                final boolean add = seto.add(new Salesman(csv));
+                if(!add) {
+                    System.out.println("It didnt add");
+                }
+            }
+            else{
+                try {
+                    if (CSVParser.fileEmpty) {
+                        System.out.println("Empty file");
+                    }
+                    else{
+                        throw new InvalidParameterException("Wrong format of information");}
+                }catch (InvalidParameterException ex){
+                    System.out.println(ex.getMessage());
+                }
+
+            }
+        }
+        set.addAll(seto);
+        return "objects added";
+    }*/
+
 }
